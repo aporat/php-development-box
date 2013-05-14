@@ -78,7 +78,7 @@ execute "echo 'exclude=kernel*' >> /etc/yum.conf"
 
 web_app "web_app" do
    docroot "/vagrant"
-   template "project.conf.erb"
+   template "webapp.conf.erb"
    server_name "wepapp.dev"
    server_aliases [node[:hostname], "wepapp.dev"]
    notifies :reload, resources(:service => "apache2"), :delayed
