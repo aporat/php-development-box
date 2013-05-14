@@ -10,9 +10,6 @@ node.set['mysql']['server']['packages'] = %w{mysql55-server}
 node.set['mysql']['old_passwords'] = 1
 node.set['mysql']['client']['packages'] = %w{mysql55}
 
-node.set['php']['packages'] = ['php54w', 'php54w-devel', 'php54w-cli', 'php54w-snmp', 'php54w-soap', 'php54w-xml', 'php54w-xmlrpc', 'php54w-process', 'php54w-mysql55', 'php54w-pecl-memcache', 'php54w-pecl-apc', 'php54w-pear', 'php54w-pdo', 'php54w-gd', 'php54w-imap', 'php54w-mbstring']
-
-node.set['yum']['exclude'] = "kernel*"
 
 include_recipe "build-essential"
 include_recipe "apache2::default"
@@ -20,20 +17,36 @@ include_recipe "apache2::mod_ssl"
 include_recipe "apache2::mod_rewrite"
 include_recipe "openssl::default"
 
-# add the webtatic repository
-yum_repository "webtatic" do
-  repo_name "webtatic"
-  description "webtatic Stable repo"
-  url "http://repo.webtatic.com/yum/el6/x86_64/"
-  key "RPM-GPG-KEY-webtatic-andy"
-  action :add
-end
+case node['platform_family']
+  when "rhel", "fedora", "suse"
+  # add the webtatic repository
+  yum_repository "webtatic" do
+    repo_name "webtatic"
+    description "webtatic Stable repo"
+    url "http://repo.webtatic.com/yum/el6/x86_64/"
+    key "RPM-GPG-KEY-webtatic-andy"
+    action :add
+  end
 
-yum_key "RPM-GPG-KEY-webtatic-andy" do
-  url "http://repo.webtatic.com/yum/RPM-GPG-KEY-webtatic-andy"
-  action :add
-end
-
+  yum_key "RPM-GPG-KEY-webtatic-andy" do
+    url "http://repo.webtatic.com/yum/RPM-GPG-KEY-webtatic-andy"
+    action :add
+  end
+  
+  node.set['yum']['exclude'] = "kernel*"
+  node.set['php']['packages'] = ['php54w', 'php54w-devel', 'php54w-cli', 'php54w-snmp', 'php54w-soap', 'php54w-xml', 'php54w-xmlrpc', 'php54w-process', 'php54w-mysql55', 'php54w-pecl-memcache', 'php54w-pecl-apc', 'php54w-pear', 'php54w-pdo', 'php54w-gd', 'php54w-imap', 'php54w-mbstring']
+  
+  when "debian"
+    include_recipe "apt"
+    apt_repository "php54" do
+      uri "http://ppa.launchpad.net/ondrej/php5/ubuntu"
+      distribution node['lsb']['codename']
+      components ["main"]
+      keyserver "keyserver.ubuntu.com"
+      key "E5267A6C"
+    end
+  end
+  
 include_recipe "mysql::server"
 include_recipe "php"
 include_recipe "composer"

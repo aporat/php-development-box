@@ -6,6 +6,10 @@ Vagrant.configure("2") do |config|
   config.vm.box = "centos-6.3-chef-10.14.2.box"
   config.vm.box_url = "https://s3.amazonaws.com/itmat-public/centos-6.3-chef-10.14.2.box"
 
+  #config.vm.box = "precise64.box"
+  #config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+
+
   config.vm.network :forwarded_port, guest: 80,  host: 80
   config.vm.network :forwarded_port, guest: 443, host: 443
 
