@@ -4,9 +4,10 @@ PHP Vagrant Development Box
 Installation
 ------------
 
+* Install VirtualBox (http://www.virtualbox.com/)
 * Install vagrant (http://www.vagrantup.com/)
 * Clone or download this repository
-* Run ```sudo vagrant up``
+* Run ``sudo vagrant up``
 
 
 Installed Components
