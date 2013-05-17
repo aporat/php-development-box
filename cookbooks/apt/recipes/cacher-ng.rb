@@ -17,13 +17,10 @@
 # limitations under the License.
 #
 
+node.set['apt']['caching_server'] = true
+
 package "apt-cacher-ng" do
   action :install
-end
-
-service "apt-cacher-ng" do
-  supports :restart => true, :status => false
-  action :enable
 end
 
 template "/etc/apt-cacher-ng/acng.conf" do
@@ -34,9 +31,9 @@ template "/etc/apt-cacher-ng/acng.conf" do
   notifies :restart, "service[apt-cacher-ng]"
 end
 
-# Reopen resource w/ start in case config issue causes startup to fail
 service "apt-cacher-ng" do
-  action :start
+  supports :restart => true, :status => false
+  action [:enable, :start]
 end
 
 #this will help seed the proxy

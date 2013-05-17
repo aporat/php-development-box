@@ -16,7 +16,6 @@ include_recipe "apache2::mod_rewrite"
 include_recipe "openssl::default"
 
 include_recipe "php54"
-include_recipe "php"
 include_recipe "composer"
 
 include_recipe "phpmyadmin::default"
