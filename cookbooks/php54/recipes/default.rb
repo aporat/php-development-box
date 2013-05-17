@@ -22,7 +22,7 @@ case node['platform_family']
   when "debian"
     include_recipe "apt"
 	apt_repository "dotdeb-php54" do
-		uri "node['php54']['dotdeb']['uri']"
+		uri "#{node['php54']['dotdeb']['uri']}"
 		distribution "#{node['php54']['dotdeb']['distribution']}-php54"
 		components ['all']
 		key "http://www.dotdeb.org/dotdeb.gpg"
