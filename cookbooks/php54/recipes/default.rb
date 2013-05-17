@@ -19,20 +19,14 @@ case node['platform_family']
   node.set['mysql']['server']['packages'] = %w{mysql55-server}
   node.set['mysql']['client']['packages'] = %w{mysql55}
   
-  include_recipe "mysql::server"
-  
   when "debian"
     include_recipe "apt"
 	apt_repository "dotdeb-php54" do
-		uri node['dotdeb']['uri']
-		distribution "#{node['dotdeb']['distribution']}-php54"
+		uri "node['php54']['dotdeb']['uri']"
+		distribution "#{node['php54']['dotdeb']['distribution']}-php54"
 		components ['all']
 		key "http://www.dotdeb.org/dotdeb.gpg"
 		action :add
-	end
-	execute "update apt sources" do
-		command "apt-get update"
-		action :run
 	end
   end
 
